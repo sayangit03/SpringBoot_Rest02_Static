@@ -17,6 +17,7 @@ public class StudentResource {
 	@GetMapping("student")
 	public List<Student> getStudent() {
 		System.out.println("ok.. Delivering.....");
+		System.out.println("adding logs...");
 		List<Student> sList = (List<Student>) sRepo.findAll();
 		return sList;
 	}
