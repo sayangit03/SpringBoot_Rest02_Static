@@ -5,8 +5,11 @@ import java.rmi.StubNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,11 +44,24 @@ public class StudentResource {
 	}
 
 	@PostMapping("student")
-	public ResponseEntity<Object> createStudent(@RequestBody Student s) {
+	public ResponseEntity<Object> createStudent(@Valid @RequestBody Student s) {
 		System.out.println("Creating student... : "+s.getsId());
 		sRepo.save(s);
 		
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(s.getsId()).toUri();
+		System.out.println(location);
+		return ResponseEntity.created(location).build();
+	}
+	
+	@DeleteMapping("student/{id}")
+	public ResponseEntity<Object> deleteStudent(@PathVariable int id){
+		System.out.println("Deleting Student... : "+id);
+		Optional<Student> sList = sRepo.findById(id);
+		if(!sList.isPresent()) {
+			throw new StudentNotFoundException("Student not found!");
+		}
+		sRepo.deleteById(id);
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
 		System.out.println(location);
 		return ResponseEntity.created(location).build();
 	}

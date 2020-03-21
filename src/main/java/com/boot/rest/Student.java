@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
@@ -15,9 +16,11 @@ public class Student {
 	private int sId;
 	
 	@Column(name = "sname")
+	@Size(min = 3, max = 15, message = "Name should have atleast 3 characters!")
 	private String sName;
 	
 	@Column(name = "sclass")
+	@Size(max = 2)
 	private String sClass;
 	
 	@Column(name = "sscore")
